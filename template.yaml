@@ -24,7 +24,7 @@ Resources:
       # 注意：把原来的 Runtime 和 Handler 删掉！
       Architectures:
         - x86_64
-      MemorySize: 3072 
+      MemorySize: 3000 
       Timeout: 120
       Architectures:
         - x86_64  
