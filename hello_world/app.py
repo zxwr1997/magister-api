@@ -42,3 +42,10 @@ def lambda_handler(event, context):
             "statusCode": 500,
             "body": json.dumps({"error": f"Server Error: {str(e)}"})
         }
+        
+        
+        
+        
+        
+        
+#成功把
