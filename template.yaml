@@ -2,32 +2,26 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   magister
-
   Sample SAM Template for magister
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
-
     Tracing: Active
-    # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
     LoggingConfig:
       LogFormat: JSON
   Api:
     TracingEnabled: true
+
 Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Image
-      # 注意：把原来的 Runtime 和 Handler 删掉！
+      MemorySize: 3000 
+      Timeout: 120   # 给你整整两分钟，冷启动再慢也能跑通！
       Architectures:
         - x86_64
-      MemorySize: 3000 
-      Timeout: 120
-      Architectures:
-        - x86_64  
       Events:
         RecognizeDocument:
           Type: Api
@@ -46,20 +40,18 @@ Resources:
         Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
       ResourceQuery:
         Type: CLOUDFORMATION_STACK_1_0
+
   ApplicationInsightsMonitoring:
     Type: AWS::ApplicationInsights::Application
     Properties:
       ResourceGroupName:
         Ref: ApplicationResourceGroup
       AutoConfigurationEnabled: 'true'
-      Timeout: 60
+      # 注意：这里的 Timeout 已经被我删除了！
+
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   HelloWorldApi:
-    Description: API Gateway endpoint URL for Prod stage for Hello World 
-      function
+    Description: API Gateway endpoint URL for Prod stage for Hello World function
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/api/v1/recognize"
   HelloWorldFunction:
     Description: Hello World Lambda Function ARN
